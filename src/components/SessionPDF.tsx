@@ -75,3 +75,4 @@ export const SessionPDF = ({ studentName, date, score, result, answers }: Sessio
             </Page>
         </Document>
     )
+}
