@@ -1,29 +1,25 @@
 :root {
-  /* Premium Dark Cinematic Palette */
+  /* Ultra Premium Aurora Palette */
   --primary: #6366f1;
-  /* Indigo 500 */
   --primary-foreground: #ffffff;
 
-  --background: #0f172a;
-  /* Slate 900 */
+  --background: #030712;
+  /* Rich Black */
   --foreground: #f8fafc;
-  /* Slate 50 */
 
-  /* Glass Card Variables - Ultra Premium */
-  --card-bg: rgba(30, 41, 59, 0.4);
-  /* Darker, more transparent */
-  --card-border: rgba(255, 255, 255, 0.1);
-  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  /* Glass - High Contrast */
+  --card-bg: rgba(17, 24, 39, 0.7);
+  /* Darker base */
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 
-  --radius: 1rem;
+  --radius: 1.5rem;
+  /* Rounder modern look */
 
-  /* Neon Status Colors */
-  --status-red: #f43f5e;
-  /* Rose 500 */
-  --status-yellow: #f59e0b;
-  /* Amber 500 */
-  --status-green: #10b981;
-  /* Emerald 500 */
+  /* Neon Accents */
+  --status-red: #ff3366;
+  --status-yellow: #fbbf24;
+  --status-green: #00e676;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -35,10 +31,10 @@
 }
 
 body {
-  font-family: var(--font-sans);
   background-color: var(--background);
   color: var(--foreground);
   min-height: 100vh;
+  overflow-x: hidden;
 
   /* Cinematic Animated Background */
   background: radial-gradient(circle at top left, #1e1b4b, transparent 40%),
@@ -47,23 +43,27 @@ body {
   background-attachment: fixed;
 }
 
-/* Glassmorphism Utilities */
+/* Premium Glass Card */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
   border-radius: var(--radius);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), inset 0 0 20px rgba(255, 255, 255, 0.05);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .glass-card:hover {
-  background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(99, 102, 241, 0.3);
-  /* Primary glow on hover */
-  transform: translateY(-2px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1), 0 0 15px rgba(99, 102, 241, 0.2);
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(99, 102, 241, 0.5);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Neon Text Shadow */
+.shadow-neon {
+  text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
 }
 
 .container {
