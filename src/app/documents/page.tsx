@@ -249,7 +249,7 @@ export default function DocumentsPage() {
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {filteredDocs.map((doc) => (
-                                    <tr key={doc.id} className="hover:bg-gray-50 transition-colors group">
+                                    <tr key={doc.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${doc.type.includes('pdf') ? 'bg-red-50 text-red-600' :
