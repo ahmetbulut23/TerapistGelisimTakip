@@ -42,13 +42,17 @@ export function StudentCard({ student }: StudentCardProps) {
         ? scoreColorMap[student.lastResult as keyof typeof scoreColorMap]
         : 'bg-white/20 backdrop-blur-sm text-white'
 
+    const avatarRingColor = student.lastResult && scoreColorMap[student.lastResult as keyof typeof scoreColorMap]
+        ? scoreColorMap[student.lastResult as keyof typeof scoreColorMap].split(' ')[0].replace('bg-', 'ring-')
+        : 'ring-white/30'
+
     return (
         <Link href={`/students/${student.id}`}>
             <div className="card p-0 overflow-hidden group hover:shadow-xl transition-all duration-300">
                 {/* Header with Avatar */}
                 <div className="bg-gradient-to-br from-violet-500 to-purple-600 p-6 pb-8">
                     <div className="flex items-center justify-between mb-3">
-                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-lg ring-4 ring-white/30">
+                        <div className={`w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-lg ring-4 ${avatarRingColor} transition-all`}>
                             {student.nameSurname.charAt(0).toUpperCase()}
                         </div>
                         {student.lastScore !== null && student.lastScore !== undefined && (
