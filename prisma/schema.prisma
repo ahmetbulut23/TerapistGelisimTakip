@@ -12,6 +12,7 @@ model Therapist {
   email         String    @unique
   password_hash String
   full_name     String
+  preferences   Json?     @default("{}") // Store UI settings here
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
@@ -39,9 +40,9 @@ model Session {
   id              String   @id @default(uuid())
   studentId       String   @map("student_id")
   date            DateTime @default(now())
-  rawAnswers      Json     @map("raw_answers") // Stores boolean answers
+  rawAnswers      Json     @map("raw_answers")
   calculatedScore Int      @map("calculated_score")
-  clinicalResult  String   @map("clinical_result") // 'Red', 'Yellow', 'Green'
+  clinicalResult  String   @map("clinical_result")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -56,7 +57,7 @@ model Document {
   type      String
   category  String
   size      Int
-  data      String   // Base64 content
+  data      String
   createdAt DateTime @default(now())
 
   @@map("documents")
