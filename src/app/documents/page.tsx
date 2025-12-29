@@ -236,59 +236,61 @@ export default function DocumentsPage() {
                 </div>
             ) : filteredDocs.length > 0 ? (
                 <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                    <table className="w-full">
-                        <thead className="bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dosya Adı</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Boyut</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarih</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">İşlemler</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {filteredDocs.map((doc) => (
-                                <tr key={doc.id} className="hover:bg-gray-50 transition-colors group">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${doc.type.includes('pdf') ? 'bg-red-50 text-red-600' :
+                    <div className="overflow-x-auto custom-scrollbar">
+                        <table className="w-full whitespace-nowrap">
+                            <thead className="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dosya Adı</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Boyut</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarih</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {filteredDocs.map((doc) => (
+                                    <tr key={doc.id} className="hover:bg-gray-50 transition-colors group">
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${doc.type.includes('pdf') ? 'bg-red-50 text-red-600' :
                                                     doc.type.includes('image') ? 'bg-blue-50 text-blue-600' :
                                                         'bg-gray-100 text-gray-600'
-                                                }`}>
-                                                <FileText className="w-5 h-5" />
+                                                    }`}>
+                                                    <FileText className="w-5 h-5" />
+                                                </div>
+                                                <span className="font-medium text-gray-900">{doc.name}</span>
                                             </div>
-                                            <span className="font-medium text-gray-900">{doc.name}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className="badge badge-secondary">{doc.category}</span>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-500">{formatSize(doc.size)}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-500">
-                                        {new Date(doc.createdAt).toLocaleDateString('tr-TR')}
-                                    </td>
-                                    <td className="px-6 py-4 text-right">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <button
-                                                onClick={() => handleDownload(doc.id, doc.name)}
-                                                className="p-2 hover:bg-violet-50 text-violet-600 rounded-lg transition-colors"
-                                                title="İndir"
-                                            >
-                                                <Download className="w-4 h-4" />
-                                            </button>
-                                            <button
-                                                onClick={(e) => handleDelete(doc.id, e)}
-                                                className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors"
-                                                title="Sil"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="badge badge-secondary">{doc.category}</span>
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-500">{formatSize(doc.size)}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-500">
+                                            {new Date(doc.createdAt).toLocaleDateString('tr-TR')}
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={() => handleDownload(doc.id, doc.name)}
+                                                    className="p-2 hover:bg-violet-50 text-violet-600 rounded-lg transition-colors"
+                                                    title="İndir"
+                                                >
+                                                    <Download className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={(e) => handleDelete(doc.id, e)}
+                                                    className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors"
+                                                    title="Sil"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             ) : (
                 <div className="card p-12 text-center">

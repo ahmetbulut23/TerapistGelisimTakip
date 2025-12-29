@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'TerapiPanel - Gelişim Takip Sistemi',
   description: 'Modern terapi ve gelişim takip platformu',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0',
 }
 
 import { AppSettingsProvider } from '@/components/AppSettingsProvider'
