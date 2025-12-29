@@ -49,3 +49,15 @@ model Session {
 
   @@map("sessions")
 }
+
+model Document {
+  id        String   @id @default(uuid())
+  name      String
+  type      String
+  category  String
+  size      Int
+  data      String   // Base64 content
+  createdAt DateTime @default(now())
+
+  @@map("documents")
+}
