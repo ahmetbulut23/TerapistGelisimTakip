@@ -68,6 +68,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body {
+  overscroll-behavior-y: none;
+  height: 100%;
+}
+
 /* Card Component */
 .card {
   background: var(--surface);
