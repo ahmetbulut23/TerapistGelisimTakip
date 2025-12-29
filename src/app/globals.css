@@ -49,8 +49,44 @@
   /* Gray 800 */
   --foreground: #F9FAFB;
   /* Gray 50 */
-  --muted: #9CA3AF;
   /* Gray 400 */
+}
+
+/* Dark Mode Text Overrides */
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-gray-700 {
+  color: #F9FAFB !important;
+  /* Gray 50 */
+}
+
+.dark .text-gray-600,
+.dark .text-gray-500 {
+  color: #D1D5DB !important;
+  /* Gray 300 */
+}
+
+.dark .text-gray-400 {
+  color: #9CA3AF !important;
+  /* Gray 400 */
+}
+
+.dark .bg-white {
+  background-color: #1F2937 !important;
+  /* Gray 800 */
+  border-color: #374151 !important;
+  /* Gray 700 */
+}
+
+.dark .bg-gray-50 {
+  background-color: #111827 !important;
+  /* Gray 900 */
+}
+
+.dark .border-gray-100,
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+  /* Gray 700 */
 }
 
 * {
