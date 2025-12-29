@@ -1,48 +1,45 @@
 :root {
-  /* Premium Color Palette (HSL) */
-  --primary-h: 220;
-  --primary-s: 90%;
-  --primary-l: 56%;
+  /* Vibrant & Premium Palette */
+  --primary-h: 250;
+  --primary-s: 95%;
+  --primary-l: 60%;
   --primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
   --primary-foreground: hsl(0, 0%, 100%);
 
-  --background-h: 220;
-  --background-s: 50%;
-  --background-l: 98%;
+  --background-h: 240;
+  --background-s: 30%;
+  --background-l: 96%;
   --background: hsl(var(--background-h), var(--background-s), var(--background-l));
-  --foreground: hsl(222, 47%, 11%);
+  --foreground: hsl(240, 10%, 10%);
 
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(222, 47%, 11%);
+  /* Glass Card Variables */
+  --card-bg: rgba(255, 255, 255, 0.65);
+  --card-border: rgba(255, 255, 255, 0.4);
+  --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
 
-  --border: hsl(214, 32%, 91%);
-  --input: hsl(214, 32%, 91%);
-  --ring: hsl(220, 90%, 56%);
+  --radius: 1rem;
 
-  --radius: 0.75rem;
+  /* Status Colors (Neon-ish) */
+  --status-red: hsl(340, 80%, 60%);
+  --status-yellow: hsl(40, 95%, 50%);
+  --status-green: hsl(150, 85%, 45%);
 
-  /* Status Colors */
-  --status-red: hsl(0, 84%, 60%);
-  --status-yellow: hsl(38, 92%, 50%);
-  --status-green: hsl(142, 76%, 36%);
-
-  /* Typography */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-h: 222;
-    --background-s: 47%;
-    --background-l: 11%;
-    --background: hsl(var(--background-h), var(--background-s), var(--background-l));
-    --foreground: hsl(210, 40%, 98%);
+    --primary-l: 65%;
 
-    --card: hsl(222, 47%, 14%);
-    --card-foreground: hsl(210, 40%, 98%);
+    --background-h: 240;
+    --background-s: 20%;
+    --background-l: 10%;
 
-    --border: hsl(217, 32%, 24%);
-    --input: hsl(217, 32%, 24%);
+    --foreground: hsl(0, 0%, 98%);
+
+    --card-bg: rgba(20, 20, 30, 0.65);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -50,20 +47,50 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  border-color: var(--border);
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--background);
   color: var(--foreground);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
   min-height: 100vh;
+  /* Animated Gradient Background */
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
 }
 
-/* Utilities */
+/* Dark Mode Gradient Override */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1f4068);
+    background-size: 400% 400%;
+  }
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -71,45 +98,72 @@ body {
   padding: 0 1rem;
 }
 
+/* Modern Button */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius);
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  transition: all 0.2s ease;
+  border-radius: 999px;
+  /* Pill shape */
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  border: 1px solid transparent;
+  border: none;
   text-decoration: none;
+  letter-spacing: 0.025em;
 }
 
 .btn-primary {
-  background-color: var(--primary);
+  background: var(--primary);
   color: var(--primary-foreground);
-  box-shadow: 0 4px 12px hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.25);
+  box-shadow: 0 4px 15px rgba(var(--primary-h), var(--primary-s), var(--primary-l), 0.4);
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(var(--primary-h), var(--primary-s), var(--primary-l), 0.6);
 }
 
 .card {
-  background-color: var(--card);
-  color: var(--card-foreground);
+  /* Reusing glass style for existing .card class */
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--card-shadow);
   padding: 1.5rem;
+  transition: transform 0.3s ease;
 }
 
-/* Animations */
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* Utility Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Status Badges */
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
