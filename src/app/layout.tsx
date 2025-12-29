@@ -17,11 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <body className={clsx(outfit.className, 'bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary-foreground overflow-x-hidden relative')}>
-        {/* Ambient Background Glows */}
-        <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-indigo-900/40 via-background to-background pointer-events-none" />
-        <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary/20 blur-[120px] pointer-events-none mix-blend-screen animate-pulse" />
-        <div className="fixed bottom-[-10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-blue-600/20 blur-[100px] pointer-events-none mix-blend-screen" />
+      <body className={clsx(outfit.className, 'bg-background text-foreground antialiased selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden relative')}>
+        {/* Soft Background Gradients for Light Theme */}
+        <div className="fixed top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-indigo-50/50 to-transparent -z-10 pointer-events-none" />
+        <div className="fixed -top-[20%] -right-[10%] w-[600px] h-[600px] rounded-full bg-blue-100/40 blur-[100px] pointer-events-none mix-blend-multiply" />
+        <div className="fixed top-[20%] -left-[10%] w-[600px] h-[600px] rounded-full bg-purple-100/40 blur-[100px] pointer-events-none mix-blend-multiply" />
 
         {children}
       </body>

@@ -1,25 +1,25 @@
 :root {
-  /* Ultra Premium Aurora Palette */
-  --primary: #6366f1;
+  /* Modern Light Glass Palette */
+  --primary: #4f46e5;
+  /* Indigo 600 */
   --primary-foreground: #ffffff;
 
-  --background: #030712;
-  /* Rich Black */
-  --foreground: #f8fafc;
+  --background: #f0f4f8;
+  /* Soft Cloud Blue */
+  --foreground: #1e293b;
+  /* Slate 800 */
 
-  /* Glass - High Contrast */
-  --card-bg: rgba(17, 24, 39, 0.7);
-  /* Darker base */
-  --card-border: rgba(255, 255, 255, 0.08);
-  --card-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  /* Glass - Light Mode */
+  --card-bg: rgba(255, 255, 255, 0.65);
+  --card-border: rgba(255, 255, 255, 0.4);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 
   --radius: 1.5rem;
-  /* Rounder modern look */
 
-  /* Neon Accents */
-  --status-red: #ff3366;
-  --status-yellow: #fbbf24;
-  --status-green: #00e676;
+  /* Status Colors */
+  --status-red: #ef4444;
+  --status-yellow: #f59e0b;
+  --status-green: #10b981;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -36,34 +36,35 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 
-  /* Cinematic Animated Background */
-  background: radial-gradient(circle at top left, #1e1b4b, transparent 40%),
-    radial-gradient(circle at bottom right, #312e81, transparent 40%),
-    radial-gradient(circle at center, #0f172a, #020617);
+  /* Light Gradient Mesh */
+  background:
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.15) 0px, transparent 50%);
   background-attachment: fixed;
 }
 
-/* Premium Glass Card */
+/* Premium Glass Card - Light */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow);
   border-radius: var(--radius);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .glass-card:hover {
-  background: rgba(30, 41, 59, 0.8);
-  border-color: rgba(99, 102, 241, 0.5);
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
 }
 
-/* Neon Text Shadow */
+/* Neon Text Shadow - Adjusted for Light */
 .shadow-neon {
-  text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+  text-shadow: 0 0 20px rgba(79, 70, 229, 0.2);
 }
 
 .container {
