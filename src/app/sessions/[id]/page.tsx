@@ -13,12 +13,24 @@ export default async function SessionResultPage({ params }: { params: Promise<{ 
 
     if (!session) notFound()
 
-    const resultColor: { [key: string]: string } = {
-        'Red': 'text-status-red bg-red-50 border-status-red',
-        'Yellow': 'text-status-yellow bg-yellow-50 border-status-yellow',
-        'Green': 'text-status-green bg-green-50 border-status-green',
+    const resultColor: { [key: string]: { card: string, circle: string, text: string } } = {
+        'Red': {
+            card: 'bg-red-50 border-red-200 dark:bg-red-900/10 dark:border-red-800',
+            circle: 'bg-red-500 border-red-500 text-black',
+            text: 'text-red-700 dark:text-red-400'
+        },
+        'Yellow': {
+            card: 'bg-amber-50 border-amber-200 dark:bg-amber-900/10 dark:border-amber-800',
+            circle: 'bg-amber-400 border-amber-400 text-black',
+            text: 'text-amber-800 dark:text-amber-400'
+        },
+        'Green': {
+            card: 'bg-emerald-50 border-emerald-200 dark:bg-emerald-900/10 dark:border-emerald-800',
+            circle: 'bg-emerald-500 border-emerald-500 text-black',
+            text: 'text-emerald-800 dark:text-emerald-400'
+        },
     }
-    const colorClass = resultColor[session.clinicalResult] || resultColor['Red'] // Fallback
+    const colors = resultColor[session.clinicalResult] || resultColor['Red'] // Fallback
 
     const resultText: { [key: string]: string } = {
         'Red': 'Yoğun destek gerekli.',
@@ -46,18 +58,18 @@ export default async function SessionResultPage({ params }: { params: Promise<{ 
                 <p className="text-muted-foreground">{session.student.nameSurname} - {new Date(session.date).toLocaleDateString('tr-TR')}</p>
             </div>
 
-            <div className={`card p-8 border-2 ${colorClass} flex flex-col items-center justify-center text-center space-y-6 mb-8`}>
-                <div className="w-24 h-24 rounded-full border-4 border-current flex items-center justify-center bg-white">
-                    <span className="text-4xl font-bold">{session.calculatedScore}</span>
-                    <span className="text-sm text-gray-400 absolute mt-12">/30</span>
+            <div className={`card p-8 border-2 ${colors.card} flex flex-col items-center justify-center text-center space-y-6 mb-8`}>
+                <div className={`w-32 h-32 rounded-full border-[6px] ${colors.circle} flex flex-col items-center justify-center shadow-lg transition-all relative`}>
+                    <span className="text-5xl font-bold tracking-tighter">{session.calculatedScore}</span>
+                    <span className="text-xs font-bold opacity-75 absolute bottom-6">/30</span>
                 </div>
 
                 <div>
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                        <Icon className="w-6 h-6" />
-                        <h2 className="text-xl font-bold uppercase tracking-wide">{session.clinicalResult}</h2>
+                    <div className={`flex items-center justify-center gap-2 mb-2 ${colors.text}`}>
+                        <Icon className="w-7 h-7" />
+                        <h2 className="text-2xl font-bold uppercase tracking-wide">{session.clinicalResult}</h2>
                     </div>
-                    <p className="font-medium text-lg opacity-90">{text}</p>
+                    <p className={`font-medium text-lg ${colors.text} opacity-90`}>{text}</p>
                 </div>
             </div>
 
