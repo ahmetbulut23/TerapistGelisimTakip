@@ -1,54 +1,85 @@
+'use client'
+
 import { BarChart3, TrendingUp, FileText, Download, Users, ArrowUp, ArrowDown, Minus } from 'lucide-react'
 import Link from 'next/link'
-import { prisma } from '@/lib/db'
+import { useEffect, useState } from 'react'
+import { StudentProgressModal } from '@/components/StudentProgressModal'
 
-export const dynamic = 'force-dynamic'
+type Student = {
+    id: string
+    name: string
+    sessionCount: number
+    avgScore: number
+    lastScore: number | null
+    lastResult: string | null
+    trend: string
+    sessions: Array<{
+        date: Date
+        score: number
+        result: string
+    }>
+}
 
-export default async function ReportsPage() {
-    let students: any[] = []
-    let totalSessions = 0
-    let avgScore = 0
+export default function ReportsPage() {
+    const [students, setStudents] = useState<Student[]>([])
+    const [totalSessions, setTotalSessions] = useState(0)
+    const [avgScore, setAvgScore] = useState(0)
+    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+    const [loading, setLoading] = useState(true)
 
-    try {
-        const studentsData = await prisma.student.findMany({
-            include: {
-                sessions: {
-                    orderBy: { date: 'desc' }
-                }
-            },
-            orderBy: { nameSurname: 'asc' }
-        })
-
-        students = studentsData.map(s => {
-            const sessions = s.sessions
-            const scores = sessions.map((sess: any) => sess.calculatedScore).filter((score: any) => score !== null)
-            const avgStudentScore = scores.length > 0 ? scores.reduce((a: number, b: number) => a + b, 0) / scores.length : 0
-
-            let trend = 'stable'
-            if (sessions.length >= 2 && scores.length >= 2) {
-                const recentScore = scores[0]
-                const previousScore = scores[1]
-                if (recentScore > previousScore) trend = 'up'
-                else if (recentScore < previousScore) trend = 'down'
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const res = await fetch('/api/reports')
+                const data = await res.json()
+                setStudents(data.students)
+                setTotalSessions(data.totalSessions)
+                setAvgScore(data.avgScore)
+            } catch (error) {
+                console.error('Failed to fetch reports:', error)
+            } finally {
+                setLoading(false)
             }
+        }
+        fetchData()
+    }, [])
 
-            return {
-                id: s.id,
-                name: s.nameSurname,
-                sessionCount: sessions.length,
-                avgScore: avgStudentScore,
-                lastScore: scores[0] || null,
-                lastResult: sessions[0]?.clinicalResult || null,
-                trend
-            }
-        })
+    const handleExportPDF = () => {
+        const printContent = document.getElementById('report-table')
+        if (!printContent) return
 
-        totalSessions = students.reduce((sum, s) => sum + s.sessionCount, 0)
-        const totalScores = students.filter(s => s.avgScore > 0).map(s => s.avgScore)
-        avgScore = totalScores.length > 0 ? totalScores.reduce((a, b) => a + b, 0) / totalScores.length : 0
+        const printWindow = window.open('', '', 'height=600,width=800')
+        if (!printWindow) return
 
-    } catch (error) {
-        console.error("Failed to fetch reports:", error)
+        printWindow.document.write('<html><head><title>Gelişim Raporları</title>')
+        printWindow.document.write('<style>')
+        printWindow.document.write('body { font-family: Arial, sans-serif; padding: 20px; }')
+        printWindow.document.write('table { width: 100%; border-collapse: collapse; }')
+        printWindow.document.write('th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }')
+        printWindow.document.write('th { background-color: #8B5CF6; color: white; }')
+        printWindow.document.write('h1 { color: #8B5CF6; }')
+        printWindow.document.write('.badge { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 10px; }')
+        printWindow.document.write('.success { background: #D1FAE5; color: #065F46; }')
+        printWindow.document.write('.warning { background: #FEF3C7; color: #92400E; }')
+        printWindow.document.write('.danger { background: #FEE2E2; color: #991B1B; }')
+        printWindow.document.write('</style></head><body>')
+        printWindow.document.write('<h1>TerapiPanel - Gelişim Raporları</h1>')
+        printWindow.document.write('<p>Rapor Tarihi: ' + new Date().toLocaleDateString('tr-TR') + '</p>')
+        printWindow.document.write(printContent.innerHTML)
+        printWindow.document.write('</body></html>')
+        printWindow.document.close()
+        printWindow.print()
+    }
+
+    if (loading) {
+        return (
+            <div className="animate-fade-in flex items-center justify-center h-96">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Raporlar yükleniyor...</p>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -101,14 +132,17 @@ export default async function ReportsPage() {
             <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold text-gray-900">Performans Analizi</h2>
-                    <button className="text-sm font-medium text-violet-600 hover:text-violet-700 flex items-center gap-1">
+                    <button
+                        onClick={handleExportPDF}
+                        className="text-sm font-medium text-violet-600 hover:text-violet-700 flex items-center gap-1"
+                    >
                         <Download className="w-4 h-4" />
-                        PDF İndir
+                        Tabloyu PDF İndir
                     </button>
                 </div>
 
                 {students.length > 0 ? (
-                    <div className="card overflow-hidden">
+                    <div className="card overflow-hidden" id="report-table">
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead className="bg-gray-50 border-b border-gray-200">
@@ -169,22 +203,28 @@ export default async function ReportsPage() {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 {student.lastResult === 'Green' && (
-                                                    <span className="badge badge-success">BAŞARILI</span>
+                                                    <span className="badge success">BAŞARILI</span>
                                                 )}
                                                 {student.lastResult === 'Yellow' && (
-                                                    <span className="badge badge-warning">ORTA</span>
+                                                    <span className="badge warning">ORTA</span>
                                                 )}
                                                 {student.lastResult === 'Red' && (
-                                                    <span className="badge badge-danger">DESTEK GEREKLİ</span>
+                                                    <span className="badge danger">DESTEK GEREKLİ</span>
                                                 )}
                                                 {!student.lastResult && (
                                                     <span className="text-xs text-gray-400">-</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                <button
+                                                    onClick={() => setSelectedStudent(student)}
+                                                    className="text-violet-600 hover:text-violet-700 font-medium mr-3"
+                                                >
+                                                    Grafik
+                                                </button>
                                                 <Link
                                                     href={`/students/${student.id}`}
-                                                    className="text-violet-600 hover:text-violet-700 font-medium"
+                                                    className="text-teal-600 hover:text-teal-700 font-medium"
                                                 >
                                                     Detay
                                                 </Link>
@@ -214,7 +254,11 @@ export default async function ReportsPage() {
             {/* Export Options */}
             {students.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="card p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                    <button
+                        onClick={() => students.length > 0 && setSelectedStudent(students[0])}
+                        className="card p-6 hover:shadow-lg transition-shadow text-left disabled:opacity-50"
+                        disabled={students.length === 0}
+                    >
                         <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4">
                             <BarChart3 className="w-6 h-6 text-violet-600" />
                         </div>
@@ -222,31 +266,42 @@ export default async function ReportsPage() {
                         <p className="text-sm text-gray-600 mb-4">
                             Öğrencilerin zaman içindeki gelişim trendlerini görüntüleyin
                         </p>
-                        <div className="text-sm font-medium text-violet-600">Yakında →</div>
-                    </div>
+                        <div className="text-sm font-medium text-violet-600">Grafikleri Görüntüle →</div>
+                    </button>
 
-                    <div className="card p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                    <Link href="/students" className="card p-6 hover:shadow-lg transition-shadow">
                         <div className="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mb-4">
                             <TrendingUp className="w-6 h-6 text-teal-600" />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">Detaylı Analiz</h3>
                         <p className="text-sm text-gray-600 mb-4">
-                            Soru bazlı performans ve kategori analizleri
+                            Öğrenci profil sayfalarında soru bazlı detaylı analizler
                         </p>
-                        <div className="text-sm font-medium text-teal-600">Yakında →</div>
-                    </div>
+                        <div className="text-sm font-medium text-teal-600">Öğrencilere Git →</div>
+                    </Link>
 
-                    <button className="card p-6 hover:shadow-lg transition-shadow text-left">
+                    <button
+                        onClick={handleExportPDF}
+                        className="card p-6 hover:shadow-lg transition-shadow text-left"
+                    >
                         <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center mb-4">
                             <Download className="w-6 h-6 text-orange-600" />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">Toplu PDF İndir</h3>
                         <p className="text-sm text-gray-600 mb-4">
-                            Tüm öğrenciler için detaylı PDF raporları oluştur
+                            Tüm öğrenciler için performans tablosunu PDF olarak kaydet
                         </p>
-                        <div className="text-sm font-medium text-orange-600">İndir →</div>
+                        <div className="text-sm font-medium text-orange-600">PDF Oluştur →</div>
                     </button>
                 </div>
+            )}
+
+            {/* Progress Modal */}
+            {selectedStudent && (
+                <StudentProgressModal
+                    student={selectedStudent}
+                    onClose={() => setSelectedStudent(null)}
+                />
             )}
         </div>
     )
