@@ -68,7 +68,9 @@ export default function ReportsPage() {
         printWindow.document.write(printContent.innerHTML)
         printWindow.document.write('</body></html>')
         printWindow.document.close()
+        printWindow.focus()
         printWindow.print()
+        printWindow.close()
     }
 
     if (loading) {
