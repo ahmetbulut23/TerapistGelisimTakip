@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { ArrowLeft, CheckCircle, AlertTriangle, XCircle } from 'lucide-react'
 import { PDFDownloadButton } from '@/components/PDFDownloadButton'
 
-export default async function SessionResultPage({ params }: { params: { id: string } }) {
+export default async function SessionResultPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
     const session = await prisma.session.findUnique({
-        where: { id: params.id },
+        where: { id },
         include: { student: true }
     })
 

@@ -7,10 +7,11 @@ import { StudentProgressChart } from '@/components/StudentProgressChart'
 export default async function StudentDetailPage({
     params
 }: {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }) {
+    const { id } = await params
     const student = await prisma.student.findUnique({
-        where: { id: params.id },
+        where: { id },
         include: {
             sessions: {
                 orderBy: { date: 'asc' }
