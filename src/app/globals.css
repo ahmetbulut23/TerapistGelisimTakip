@@ -300,12 +300,12 @@ body {
     transform: translateX(-100%);
   }
 
-  margin-left: 0;
-  width: 100%;
-  overflow-x: hidden;
-  padding-top: 5rem;
-  /* Space for mobile header */
-}
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    overflow-x: hidden;
+    padding-top: 5rem;
+  }
 }
 
 /* Custom Scrollbar for horizontal scrolling tables */
