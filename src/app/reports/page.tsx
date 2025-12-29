@@ -165,7 +165,7 @@ export default function ReportsPage() {
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {students.map((student) => (
-                                        <tr key={student.id} className="hover:bg-gray-50">
+                                        <tr key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="flex items-center">
                                                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm mr-3">
