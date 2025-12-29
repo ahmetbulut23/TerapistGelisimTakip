@@ -18,6 +18,26 @@ export function StudentProgressModal({ student, onClose }: StudentProgressModalP
     const maxScore = 30
     const sessions = student.sessions.slice(0, 10).reverse() // Son 10 seans
 
+    // SVG line chart dimensions
+    const width = 800
+    const height = 300
+    const padding = 40
+    const chartWidth = width - padding * 2
+    const chartHeight = height - padding * 2
+
+    // Calculate points for the line
+    const points = sessions.map((session, index) => {
+        const x = padding + (index / Math.max(sessions.length - 1, 1)) * chartWidth
+        const y = padding + chartHeight - (session.score / maxScore) * chartHeight
+        return { x, y, score: session.score, date: session.date, result: session.result }
+    })
+
+    // Create SVG path
+    const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+
+    // Create area fill path
+    const areaPath = `${linePath} L ${points[points.length - 1]?.x || padding} ${padding + chartHeight} L ${padding} ${padding + chartHeight} Z`
+
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
             <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
@@ -36,36 +56,131 @@ export function StudentProgressModal({ student, onClose }: StudentProgressModalP
                 <div className="p-6">
                     {sessions.length > 0 ? (
                         <>
-                            {/* Chart */}
-                            <div className="mb-8">
-                                <div className="flex items-end justify-between h-64 gap-2">
-                                    {sessions.map((session, index) => {
-                                        const height = (session.score / maxScore) * 100
-                                        const colors = {
-                                            'Green': 'bg-emerald-500',
-                                            'Yellow': 'bg-amber-500',
-                                            'Red': 'bg-red-500'
-                                        }
-                                        const color = colors[session.result as keyof typeof colors] || 'bg-gray-400'
-
+                            {/* Line Chart */}
+                            <div className="mb-8 bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-6">
+                                <svg viewBox={`0 0 ${width} ${height}`} className="w-full" style={{ maxHeight: '400px' }}>
+                                    {/* Grid lines */}
+                                    {[0, 1, 2, 3, 4].map(i => {
+                                        const y = padding + (i / 4) * chartHeight
                                         return (
-                                            <div key={index} className="flex-1 flex flex-col items-center">
-                                                <div className="w-full flex flex-col justify-end items-center h-full">
-                                                    <div className="text-xs font-semibold text-gray-700 mb-1">{session.score}</div>
-                                                    <div
-                                                        className={`w-full rounded-t-lg ${color} transition-all hover:opacity-80 relative group`}
-                                                        style={{ height: `${height}%`, minHeight: '20px' }}
-                                                    >
-                                                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                                            {new Date(session.date).toLocaleDateString('tr-TR')}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="text-xs text-gray-500 mt-2 text-center">S{index + 1}</div>
-                                            </div>
+                                            <g key={i}>
+                                                <line
+                                                    x1={padding}
+                                                    y1={y}
+                                                    x2={width - padding}
+                                                    y2={y}
+                                                    stroke="#e5e7eb"
+                                                    strokeWidth="1"
+                                                    strokeDasharray="4"
+                                                />
+                                                <text
+                                                    x={padding - 10}
+                                                    y={y + 5}
+                                                    textAnchor="end"
+                                                    fontSize="12"
+                                                    fill="#6b7280"
+                                                >
+                                                    {maxScore - (i / 4) * maxScore}
+                                                </text>
+                                            </g>
                                         )
                                     })}
-                                </div>
+
+                                    {/* Area fill */}
+                                    <path
+                                        d={areaPath}
+                                        fill="url(#gradient)"
+                                        opacity="0.3"
+                                    />
+
+                                    {/* Gradient definition */}
+                                    <defs>
+                                        <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                            <stop offset="0%" stopColor="#8B5CF6" />
+                                            <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0" />
+                                        </linearGradient>
+                                    </defs>
+
+                                    {/* Line */}
+                                    <path
+                                        d={linePath}
+                                        fill="none"
+                                        stroke="#8B5CF6"
+                                        strokeWidth="3"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+
+                                    {/* Data points */}
+                                    {points.map((point, index) => {
+                                        const colors = {
+                                            'Green': '#10b981',
+                                            'Yellow': '#f59e0b',
+                                            'Red': '#ef4444'
+                                        }
+                                        const color = colors[point.result as keyof typeof colors] || '#6b7280'
+
+                                        return (
+                                            <g key={index}>
+                                                <circle
+                                                    cx={point.x}
+                                                    cy={point.y}
+                                                    r="6"
+                                                    fill="white"
+                                                    stroke={color}
+                                                    strokeWidth="3"
+                                                />
+                                                <circle
+                                                    cx={point.x}
+                                                    cy={point.y}
+                                                    r="3"
+                                                    fill={color}
+                                                />
+
+                                                {/* Score label */}
+                                                <text
+                                                    x={point.x}
+                                                    y={point.y - 15}
+                                                    textAnchor="middle"
+                                                    fontSize="12"
+                                                    fontWeight="bold"
+                                                    fill="#1f2937"
+                                                >
+                                                    {point.score}
+                                                </text>
+
+                                                {/* Session label */}
+                                                <text
+                                                    x={point.x}
+                                                    y={padding + chartHeight + 20}
+                                                    textAnchor="middle"
+                                                    fontSize="11"
+                                                    fill="#6b7280"
+                                                >
+                                                    S{index + 1}
+                                                </text>
+                                            </g>
+                                        )
+                                    })}
+
+                                    {/* Axes */}
+                                    <line
+                                        x1={padding}
+                                        y1={padding + chartHeight}
+                                        x2={width - padding}
+                                        y2={padding + chartHeight}
+                                        stroke="#9ca3af"
+                                        strokeWidth="2"
+                                    />
+                                    <line
+                                        x1={padding}
+                                        y1={padding}
+                                        x2={padding}
+                                        y2={padding + chartHeight}
+                                        stroke="#9ca3af"
+                                        strokeWidth="2"
+                                    />
+                                </svg>
                             </div>
 
                             {/* Stats */}
