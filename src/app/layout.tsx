@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: 'Modern terapi ve gelişim takip platformu',
 }
 
+import { AppSettingsProvider } from '@/components/AppSettingsProvider'
+
 export default function RootLayout({
   children,
 }: {
@@ -18,10 +20,14 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body className={inter.className}>
-        <Sidebar />
-        <div className="main-content">
-          {children}
-        </div>
+        <AppSettingsProvider>
+          <div className="flex">
+            <Sidebar />
+            <div className="main-content flex-1">
+              {children}
+            </div>
+          </div>
+        </AppSettingsProvider>
       </body>
     </html>
   )
