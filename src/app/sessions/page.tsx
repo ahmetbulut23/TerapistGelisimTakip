@@ -79,9 +79,9 @@ export default async function SessionsPage() {
                     <h2 className="text-xl font-bold text-gray-900 mb-4">Öğrenci Seçin ve Seans Ekleyin</h2>
                     <div className="space-y-3">
                         {students.map((student) => (
-                            <div key={student.id} className="card p-5 flex items-center justify-between hover:shadow-lg transition-shadow">
+                            <div key={student.id} className="card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:shadow-lg transition-shadow">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shrink-0">
                                         {student.nameSurname.charAt(0).toUpperCase()}
                                     </div>
                                     <div>
@@ -89,21 +89,21 @@ export default async function SessionsPage() {
                                         <p className="text-sm text-gray-500">
                                             {student.sessions.length} seans kayıtlı
                                             {student.sessions.length > 0 && (
-                                                <> • Son seans: {new Date(student.sessions[0].date).toLocaleDateString('tr-TR')}</>
+                                                <span className="hidden sm:inline"> • Son seans: {new Date(student.sessions[0].date).toLocaleDateString('tr-TR')}</span>
                                             )}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 w-full md:w-auto">
                                     <Link
                                         href={`/students/${student.id}`}
-                                        className="btn btn-outline text-sm"
+                                        className="btn btn-outline text-sm flex-1 md:flex-none justify-center"
                                     >
                                         Profili Gör
                                     </Link>
                                     <Link
                                         href={`/students/${student.id}/sessions/new`}
-                                        className="btn btn-primary text-sm"
+                                        className="btn btn-primary text-sm flex-1 md:flex-none justify-center whitespace-nowrap"
                                     >
                                         <Plus className="w-4 h-4" />
                                         Seans Ekle
