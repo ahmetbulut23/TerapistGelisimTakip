@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Therapist {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password_hash String
+  full_name     String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  students      Student[]
+
+  @@map("therapists")
+}
+
+model Student {
+  id           String    @id @default(uuid())
+  therapistId  String    @map("therapist_id")
+  nameSurname  String    @map("name_surname")
+  birthDate    DateTime? @map("birth_date")
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  therapist    Therapist @relation(fields: [therapistId], references: [id], onDelete: Cascade)
+  sessions     Session[]
+
+  @@map("students")
+}
+
+model Session {
+  id              String   @id @default(uuid())
+  studentId       String   @map("student_id")
+  date            DateTime @default(now())
+  rawAnswers      Json     @map("raw_answers") // Stores boolean answers
+  calculatedScore Int      @map("calculated_score")
+  clinicalResult  String   @map("clinical_result") // 'Red', 'Yellow', 'Green'
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  student         Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}

@@ -1,0 +1,17 @@
+export const SESSION_QUESTIONS = [
+    { id: 'q1', text: 'Göz teması kurabiliyor mu?' },
+    { id: 'q2', text: 'İsmi söylendiğinde tepki veriyor mu?' },
+    { id: 'q3', text: 'Basit komutları (gel, otur) yerine getiriyor mu?' },
+    { id: 'q4', text: 'İsteklerini parmakla işaret ederek gösteriyor mu?' },
+    { id: 'q5', text: 'Nesneleri amacına uygun kullanıyor mu?' },
+    { id: 'q6', text: 'Sıra alma becerisi gösteriyor mu?' },
+    { id: 'q7', text: 'Taklit becerileri (ses/hareket) var mı?' },
+    { id: 'q8', text: 'Aynadaki görüntüsüne ilgi gösteriyor mu?' },
+    { id: 'q9', text: 'Yabancılara karşı tepkisi uygun mu?' },
+    { id: 'q10', text: 'Oyuncaklarla sembolik oyun oynuyor mu?' },
+    { id: 'q11', text: 'Hayıır/Dur komutunu anlıyor mu?' },
+    { id: 'q12', text: 'Kendi etrafında dönme gibi takıntıları azaldı mı?' },
+    { id: 'q13', text: 'Dokunsal hassasiyeti normal seviyede mi?' },
+    { id: 'q14', text: 'Dikkat süresi 5 dakikanın üzerinde mi?' },
+    { id: 'q15', text: 'Akranlarıyla yan yana oyun oynayabiliyor mu?' },
+]
