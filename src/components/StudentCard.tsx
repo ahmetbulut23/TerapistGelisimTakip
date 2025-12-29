@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { User, Calendar, TrendingUp } from 'lucide-react'
+import { User, Calendar, TrendingUp, ArrowRight } from 'lucide-react'
 
 type StudentCardProps = {
     student: {
@@ -13,68 +13,75 @@ type StudentCardProps = {
 
 export function StudentCard({ student }: StudentCardProps) {
     const resultColorMap = {
-        Red: 'bg-red-100 text-red-700 border-red-200',
-        Yellow: 'bg-amber-100 text-amber-700 border-amber-200',
-        Green: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+        Red: { bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500' },
+        Yellow: { bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500' },
+        Green: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     }
 
     const resultLabelMap = {
         Red: 'Destek Gerekli',
-        Yellow: 'İyi Gidiyor',
-        Green: 'Mükemmel',
+        Yellow: 'İlerleme Kaydediliyor',
+        Green: 'Hedeflere Ulaşıldı',
     }
 
-    const bgColor = student.lastResult ? resultColorMap[student.lastResult as keyof typeof resultColorMap] : 'bg-gray-100 text-gray-700 border-gray-200'
-    const resultLabel = student.lastResult ? resultLabelMap[student.lastResult as keyof typeof resultLabelMap] : 'Henüz Değerlendirilmedi'
+    const colors = student.lastResult
+        ? resultColorMap[student.lastResult as keyof typeof resultColorMap]
+        : { bg: 'bg-gray-50', text: 'text-gray-700', dot: 'bg-gray-400' }
+
+    const label = student.lastResult
+        ? resultLabelMap[student.lastResult as keyof typeof resultLabelMap]
+        : 'Henüz Değerlendirilmedi'
 
     return (
         <Link href={`/students/${student.id}`}>
-            <div className="glass-card p-6 hover:shadow-xl transition-all duration-300 group bg-white border border-gray-100">
-                {/* Avatar Circle */}
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md group-hover:scale-110 transition-transform ring-4 ring-white">
-                        {student.nameSurname.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
-                            {student.nameSurname}
-                        </h3>
-                        <p className="text-sm text-gray-500 flex items-center gap-1">
-                            <User className="w-3.5 h-3.5" />
-                            Öğrenci
-                        </p>
-                    </div>
-                </div>
-
-                {/* Status Badge */}
-                <div className={`px-3 py-1.5 rounded-full text-xs font-medium ${bgColor} border mb-3 inline-flex items-center gap-1`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${student.lastResult === 'Red' ? 'bg-red-500' : student.lastResult === 'Yellow' ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
-                    {resultLabel}
-                </div>
-
-                {/* Info Grid */}
-                <div className="space-y-2 text-sm">
-                    {student.lastSessionDate && (
-                        <div className="flex items-center gap-2 text-gray-600">
-                            <Calendar className="w-4 h-4 text-gray-400" />
-                            <span className="text-xs">{new Date(student.lastSessionDate).toLocaleDateString('tr-TR')}</span>
+            <div className="card p-0 overflow-hidden group hover:shadow-xl">
+                {/* Header with Avatar */}
+                <div className="bg-gradient-to-br from-violet-500 to-purple-600 p-6 pb-8">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-lg ring-4 ring-white/30">
+                            {student.nameSurname.charAt(0).toUpperCase()}
                         </div>
-                    )}
-                    {student.lastScore !== null && student.lastScore !== undefined && (
-                        <div className="flex items-center gap-2 text-gray-600">
-                            <TrendingUp className="w-4 h-4 text-gray-400" />
-                            <span className="text-xs font-medium">Skor: {student.lastScore}/30</span>
-                        </div>
-                    )}
+                        {student.lastScore !== null && student.lastScore !== undefined && (
+                            <div className="bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                                <span className="text-white text-sm font-bold">{student.lastScore}/30</span>
+                            </div>
+                        )}
+                    </div>
+                    <h3 className="text-white font-bold text-lg group-hover:translate-x-1 transition-transform">
+                        {student.nameSurname}
+                    </h3>
                 </div>
 
-                {/* Hover Arrow */}
-                <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-xs text-gray-500">Detayları görüntüle</span>
-                    <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                {/* Content */}
+                <div className="p-5 bg-white">
+                    {/* Status Badge */}
+                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${colors.bg} mb-4`}>
+                        <div className={`w-2 h-2 rounded-full ${colors.dot}`}></div>
+                        <span className={`text-xs font-semibold ${colors.text}`}>{label}</span>
+                    </div>
+
+                    {/* Info */}
+                    <div className="space-y-2 text-sm text-gray-600 mb-4">
+                        {student.lastSessionDate && (
+                            <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-gray-400" />
+                                <span>Son Seans: {new Date(student.lastSessionDate).toLocaleDateString('tr-TR')}</span>
+                            </div>
+                        )}
+                        {student.lastScore !== null && student.lastScore !== undefined && (
+                            <div className="flex items-center gap-2">
+                                <TrendingUp className="w-4 h-4 text-gray-400" />
+                                <span>Gelişim Skoru</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Action Link */}
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <span className="text-sm font-medium text-gray-700">Detayları görüntüle</span>
+                        <div className="w-7 h-7 rounded-full bg-violet-50 group-hover:bg-violet-500 flex items-center justify-center transition-colors">
+                            <ArrowRight className="w-4 h-4 text-violet-600 group-hover:text-white" />
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,7 @@
 import Link from 'next/link'
-import { Plus, Activity, AlertCircle, Users, User } from 'lucide-react'
+import { Plus, Activity, AlertCircle, Users, TrendingUp, Calendar, ArrowRight } from 'lucide-react'
 import { prisma } from '@/lib/db'
 import { StudentCard } from '@/components/StudentCard'
-import { MenuGrid } from '@/components/MenuGrid'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,98 +47,161 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="container py-8 md:py-12 animate-fade-in relative z-10 max-w-7xl mx-auto px-4">
+    <div className="animate-fade-in">
+      {/* Header */}
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Hoş Geldiniz 👋</h1>
+        <p className="text-gray-600">Bugünün gelişim takiplerine genel bakış</p>
+      </header>
 
-      {/* Hero Section - Clean & Simple */}
-      <section className="mb-10 text-center md:text-left">
-        <h1 className="text-4xl md:text-5xl font-bold mb-3 text-gray-900">
-          Terapist Paneli
-        </h1>
-        <p className="text-base md:text-lg text-gray-500 font-normal max-w-2xl">
-          Öğrencilerinizin gelişimini takip edin ve raporlayın.
-        </p>
-      </section>
-
-      {/* New Dashboard Layout with MenuGrid and Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        {/* Left: Menu Grid */}
-        <div className="order-2 md:order-1">
-          <h2 className="text-lg font-semibold text-gray-700 mb-5">
-            Hızlı İşlemler
-          </h2>
-          <MenuGrid />
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Total Students */}
+        <div className="card-gradient-purple p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+              <Users className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-white/80 text-[13px] font-medium">TOPLAM</span>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-white mb-1">{totalStudents}</div>
+            <div className="text-white/90 text-sm font-medium">Öğrenci</div>
+          </div>
         </div>
 
-        {/* Right: Quick Stats */}
-        <div className="order-1 md:order-2 space-y-3">
-          <h2 className="text-lg font-semibold text-gray-700 mb-5">
-            Durum Özeti
-          </h2>
-
-          <div className="glass-card p-5 flex items-center justify-between group hover:shadow-md transition-all">
-            <div>
-              <p className="text-gray-500 text-xs font-medium mb-1">Toplam Öğrenci</p>
-              <p className="text-3xl font-bold text-gray-900">{totalStudents}</p>
+        {/* Active Tracking */}
+        <div className="card-gradient-teal p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+              <Activity className="w-6 h-6 text-white" />
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-              <User className="w-6 h-6 text-blue-600" />
+            <span className="text-white/80 text-[13px] font-medium">AKTİF</span>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-white mb-1">{activeStudents}</div>
+            <div className="text-white/90 text-sm font-medium">Takip Ediliyor</div>
+          </div>
+        </div>
+
+        {/* Attention Needed */}
+        <div className="card-gradient-orange p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+              <AlertCircle className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-white/80 text-[13px] font-medium">DİKKAT</span>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-white mb-1">{attentionNeeded}</div>
+            <div className="text-white/90 text-sm font-medium">Destek Gerekli</div>
+          </div>
+        </div>
+
+        {/* Quick Action */}
+        <Link href="/students/new" className="card group hover:border-violet-200 transition-all">
+          <div className="p-6 flex flex-col items-center justify-center h-full text-center">
+            <div className="w-14 h-14 rounded-full bg-violet-100 flex items-center justify-center mb-3 group-hover:bg-violet-500 group-hover:scale-110 transition-all">
+              <Plus className="w-7 h-7 text-violet-600 group-hover:text-white transition-colors" />
+            </div>
+            <div className="text-base font-semibold text-gray-700 mb-1">Yeni Öğrenci Ekle</div>
+            <div className="text-sm text-gray-500">Hızlı kayıt oluştur</div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Recent Activity & Students */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Recent Activity */}
+        <div className="lg:col-span-1">
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-bold text-gray-900">Son Aktiviteler</h2>
+              <Calendar className="w-5 h-5 text-gray-400" />
+            </div>
+            <div className="space-y-4">
+              {students.slice(0, 5).map((student) => (
+                <div key={student.id} className="flex items-start gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    {student.nameSurname.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">{student.nameSurname}</p>
+                    <p className="text-xs text-gray-500">
+                      {student.lastSessionDate
+                        ? new Date(student.lastSessionDate).toLocaleDateString('tr-TR')
+                        : 'Henüz seans yok'}
+                    </p>
+                  </div>
+                  {student.lastScore !== null && (
+                    <div className="text-xs font-bold text-violet-600">{student.lastScore}/30</div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
+        </div>
 
-          <div className="glass-card p-5 flex items-center justify-between group hover:shadow-md transition-all">
-            <div>
-              <p className="text-gray-500 text-xs font-medium mb-1">Aktif Takip</p>
-              <p className="text-3xl font-bold text-gray-900">{activeStudents}</p>
-            </div>
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-              <Activity className="w-6 h-6 text-amber-600" />
-            </div>
+        {/* Quick Links */}
+        <div className="lg:col-span-2">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-bold text-gray-900">Hızlı İşlemler</h2>
           </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <Link href="/students" className="card p-5 text-center group hover:border-violet-200">
+              <div className="w-12 h-12 rounded-xl bg-violet-50 mx-auto mb-3 flex items-center justify-center group-hover:bg-violet-100 transition-colors">
+                <Users className="w-6 h-6 text-violet-600" />
+              </div>
+              <div className="text-sm font-semibold text-gray-700">Öğrenciler</div>
+            </Link>
 
-          <div className="glass-card p-5 flex items-center justify-between group hover:shadow-md transition-all">
-            <div>
-              <p className="text-gray-500 text-xs font-medium mb-1">Destek Gerekli</p>
-              <p className="text-3xl font-bold text-gray-900">{attentionNeeded}</p>
-            </div>
-            <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-colors">
-              <AlertCircle className="w-6 h-6 text-red-600" />
-            </div>
+            <Link href="/sessions" className="card p-5 text-center group hover:border-teal-200">
+              <div className="w-12 h-12 rounded-xl bg-teal-50 mx-auto mb-3 flex items-center justify-center group-hover:bg-teal-100 transition-colors">
+                <Calendar className="w-6 h-6 text-teal-600" />
+              </div>
+              <div className="text-sm font-semibold text-gray-700">Seanslar</div>
+            </Link>
+
+            <Link href="/reports" className="card p-5 text-center group hover:border-orange-200">
+              <div className="w-12 h-12 rounded-xl bg-orange-50 mx-auto mb-3 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                <TrendingUp className="w-6 h-6 text-orange-600" />
+              </div>
+              <div className="text-sm font-semibold text-gray-700">Raporlar</div>
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Student List Section */}
-      <section id="students-list">
+      {/* Student List */}
+      <div>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            Öğrencilerim
-          </h2>
-          <span className="text-sm text-gray-500 font-medium bg-gray-100 px-3 py-1.5 rounded-xl">
-            {students.length} Kayıt
-          </span>
+          <h2 className="text-2xl font-bold text-gray-900">Tüm Öğrenciler</h2>
+          <Link href="/students" className="text-sm font-semibold text-violet-600 hover:text-violet-700 flex items-center gap-1">
+            Tümünü Gör
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {students.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {students.map(student => (
               <StudentCard key={student.id} student={student} />
             ))}
           </div>
         ) : (
-          <div className="glass-card text-center py-20 px-4 border border-dashed border-gray-300 bg-white/40">
-            <div className="w-24 h-24 bg-white/60 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-gray-200 shadow-sm">
-              <Plus className="w-10 h-10 text-gray-400" />
+          <div className="card p-12 text-center">
+            <div className="w-20 h-20 rounded-full bg-gray-100 mx-auto mb-4 flex items-center justify-center">
+              <Users className="w-10 h-10 text-gray-400" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">Listeniz Boş</h3>
-            <p className="text-gray-500 max-w-sm mx-auto mb-8 font-light">
-              Takip sistemine başlamak için ilk öğrenci kaydını oluşturun.
-            </p>
-            <Link href="/students/new" className="inline-flex items-center px-8 py-4 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors shadow-lg hover:shadow-indigo-600/30">
-              Yeni Kayıt Oluştur
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz öğrenci yok</h3>
+            <p className="text-gray-600 mb-6">İlk öğrencinizi ekleyerek başlayın</p>
+            <Link href="/students/new" className="btn btn-primary">
+              <Plus className="w-4 h-4" />
+              Öğrenci Ekle
             </Link>
           </div>
         )}
-      </section>
-    </main>
-  );
+      </div>
+    </div>
+  )
 }
