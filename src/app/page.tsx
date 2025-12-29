@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Plus } from 'lucide-react'
+import { Plus, Activity, AlertCircle, Users, User } from 'lucide-react'
 import { prisma } from '@/lib/db'
 import { StudentCard } from '@/components/StudentCard'
 
@@ -47,62 +47,99 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="container py-8 animate-fade-in relative z-10">
+    <main className="container py-12 animate-fade-in relative z-10">
 
-      {/* Welcome / Stats Section */}
-      <section className="mb-10 text-white">
-        <h1 className="text-4xl font-extrabold mb-2 tracking-tight drop-shadow-sm">Terapist Paneli</h1>
-        <p className="text-lg opacity-90 mb-8 font-medium">Hoş geldin. Bugün kimin hayatına dokunuyoruz?</p>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="glass-card p-4 text-gray-800 flex flex-col items-center justify-center text-center bg-white/80">
-            <span className="text-3xl font-bold text-primary">{totalStudents}</span>
-            <span className="text-xs font-bold uppercase tracking-wider opacity-60">Toplam Öğrenci</span>
-          </div>
-          <div className="glass-card p-4 text-gray-800 flex flex-col items-center justify-center text-center bg-white/80">
-            <span className="text-3xl font-bold text-status-yellow">{activeStudents}</span>
-            <span className="text-xs font-bold uppercase tracking-wider opacity-60">Aktif Takip</span>
-          </div>
-          <div className="glass-card p-4 text-gray-800 flex flex-col items-center justify-center text-center bg-white/80">
-            <span className="text-3xl font-bold text-status-red">{attentionNeeded}</span>
-            <span className="text-xs font-bold uppercase tracking-wider opacity-60">Destek Gerekli</span>
-          </div>
-          <Link href="/students/new" className="glass-card p-4 flex flex-col items-center justify-center text-center hover:bg-white/40 transition-colors cursor-pointer group border-2 border-dashed border-white/50 bg-white/10">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
-              <Plus className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-sm font-bold text-white">Yeni Öğrenci Ekle</span>
-          </Link>
-        </div>
+      {/* Hero Section */}
+      <section className="mb-12 text-center md:text-left">
+        <h1 className="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 drop-shadow-2xl">
+          Terapist Paneli
+        </h1>
+        <p className="text-xl text-gray-300 font-light max-w-2xl leading-relaxed">
+          Hoş geldin. Bugün gelişimi takip et, geleceği şekillendir.
+        </p>
       </section>
+
+      {/* Stats Grid - Inspired by the "Dashboard Widgets" look */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        {/* Total Students Widget */}
+        <div className="glass-card p-6 flex flex-col justify-between h-32 relative overflow-hidden group hover:border-blue-500/50 transition-all cursor-default">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl -mr-8 -mt-8"></div>
+          <span className="text-sm font-semibold text-blue-200 uppercase tracking-widest">Toplam Öğrenci</span>
+          <div className="flex items-end justify-between">
+            <span className="text-5xl font-bold text-white shadow-neon">{totalStudents}</span>
+            <div className="bg-blue-500/20 p-2 rounded-lg">
+              <User className="w-6 h-6 text-blue-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Active Students Widget */}
+        <div className="glass-card p-6 flex flex-col justify-between h-32 relative overflow-hidden group hover:border-yellow-500/50 transition-all cursor-default">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-500/10 rounded-full blur-2xl -mr-8 -mt-8"></div>
+          <span className="text-sm font-semibold text-yellow-200 uppercase tracking-widest">Aktif Takip</span>
+          <div className="flex items-end justify-between">
+            <span className="text-5xl font-bold text-white">{activeStudents}</span>
+            <div className="bg-yellow-500/20 p-2 rounded-lg">
+              <Activity className="w-6 h-6 text-yellow-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Attention Needed Widget */}
+        <div className="glass-card p-6 flex flex-col justify-between h-32 relative overflow-hidden group hover:border-red-500/50 transition-all cursor-default">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/10 rounded-full blur-2xl -mr-8 -mt-8"></div>
+          <span className="text-sm font-semibold text-red-200 uppercase tracking-widest">Destek Gerekli</span>
+          <div className="flex items-end justify-between">
+            <span className="text-5xl font-bold text-white">{attentionNeeded}</span>
+            <div className="bg-red-500/20 p-2 rounded-lg">
+              <AlertCircle className="w-6 h-6 text-red-400" />
+            </div>
+          </div>
+        </div>
+
+        {/* Add New Action Widget */}
+        <Link href="/students/new" className="glass-card p-0 flex flex-col items-center justify-center text-center hover:bg-white/5 transition-all cursor-pointer group border-2 border-dashed border-white/20 hover:border-primary/60 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-primary transition-all duration-300">
+              <Plus className="w-6 h-6 text-primary group-hover:text-white" />
+            </div>
+            <span className="text-base font-bold text-white group-hover:text-primary-foreground transition-colors">Yeni Öğrenci Ekle</span>
+          </div>
+        </Link>
+      </div>
 
       {/* Student List Section */}
       <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white drop-shadow-md">Öğrencilerim</h2>
+        <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+          <h2 className="text-3xl font-bold text-white flex items-center gap-3">
+            <Users className="w-8 h-8 text-primary" />
+            Öğrencilerim
+          </h2>
+          <span className="text-sm text-gray-400 font-mono bg-white/5 px-3 py-1 rounded-full border border-white/10">
+            {students.length} Kayıt
+          </span>
         </div>
 
         {students.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {students.map(student => (
               <StudentCard key={student.id} student={student} />
             ))}
           </div>
         ) : (
-          <div className="glass-card text-center py-16 px-4 bg-white/90">
-            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Plus className="w-10 h-10 text-primary" />
+          <div className="glass-card text-center py-20 px-4 border border-white/10 bg-black/20">
+            <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 ring-1 ring-white/10">
+              <Plus className="w-10 h-10 text-gray-400" />
             </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Listeniz Boş Görünüyor</h3>
-            <p className="text-gray-600 max-w-sm mx-auto mb-8">
-              Takip ettiğiniz ilk öğrenciyi ekleyerek yolculuğa başlayın. Seansları kaydedin ve gelişimi izleyin.
+            <h3 className="text-2xl font-bold text-white mb-2">Listeniz Boş</h3>
+            <p className="text-gray-400 max-w-sm mx-auto mb-8 font-light">
+              Takip sistemine başlamak için ilk öğrenci kaydını oluşturun.
             </p>
-            <Link href="/students/new" className="btn btn-primary px-8 py-3 text-lg shadow-xl">
-              İlk Öğrenciyi Ekle
+            <Link href="/students/new" className="btn btn-primary px-10 py-4 text-lg shadow-2xl hover:shadow-primary/50">
+              Yeni Kayıt Oluştur
             </Link>
           </div>
         )}
       </section>
-    </main>
-  );
 }
