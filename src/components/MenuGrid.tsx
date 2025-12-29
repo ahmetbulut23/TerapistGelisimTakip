@@ -27,16 +27,16 @@ export function MenuGrid() {
     ]
 
     return (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {menuItems.map((item, index) => (
                 <Link
                     key={index}
                     href={item.href}
                     className={`
-                        glass-card aspect-square flex flex-col items-center justify-center gap-3
-                        group hover:bg-indigo-50 transition-all duration-300 relative overflow-hidden
-                        ${item.active ? 'bg-indigo-100/50 border-indigo-200' : 'bg-white/60'}
-                        ${item.placeholder ? 'opacity-60 cursor-not-allowed' : ''}
+                        glass-card aspect-square flex flex-col items-center justify-center gap-2 p-4
+                        group hover:shadow-md transition-all duration-200 relative overflow-hidden
+                        ${item.active ? 'bg-blue-50 border-blue-200' : 'bg-white'}
+                        ${item.placeholder ? 'opacity-50 cursor-not-allowed' : ''}
                     `}
                     onClick={(e) => {
                         if (item.placeholder) {
@@ -49,26 +49,22 @@ export function MenuGrid() {
                         }
                     }}
                 >
-                    {/* Active Indicator Line */}
+                    {/* Active Indicator */}
                     {item.active && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-12 bg-indigo-500 rounded-r-full" />
+                        <div className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full" />
                     )}
 
-                    {/* Hover Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
                     <div className={`
-                        p-4 rounded-2xl bg-white shadow-sm ring-1 ring-gray-100
-                        group-hover:scale-110 group-hover:shadow-md transition-all duration-300
-                        ${item.active ? 'bg-white ring-indigo-100' : ''}
+                        w-12 h-12 rounded-2xl flex items-center justify-center
+                        ${item.active ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'}
+                        group-hover:scale-105 transition-transform
                     `}>
-                        <item.icon className={`w-8 h-8 ${item.color || 'text-gray-600'} ${item.active ? 'text-indigo-600' : ''}`} />
+                        <item.icon className="w-6 h-6" />
                     </div>
 
                     <span className={`
-                        text-sm font-semibold tracking-wide
-                        ${item.active ? 'text-indigo-700' : 'text-gray-600'}
-                        group-hover:text-indigo-800 transition-colors
+                        text-xs font-medium
+                        ${item.active ? 'text-blue-700' : 'text-gray-600'}
                     `}>
                         {item.label}
                     </span>
