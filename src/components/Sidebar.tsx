@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, Calendar, FileText, Settings, BarChart3, Brain, Menu, X } from 'lucide-react'
+import { Home, Users, Calendar, FileText, Settings, BarChart3, Brain, Menu, X, LogOut } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { logout } from '@/lib/actions'
 
-export function Sidebar() {
+export function Sidebar({ user }: { user?: { name?: string | null, email?: string | null } }) {
     const pathname = usePathname()
     const [isOpen, setIsOpen] = useState(false)
 
@@ -83,18 +84,25 @@ export function Sidebar() {
                 </nav>
 
                 {/* Bottom Section */}
-                <div className="absolute bottom-8 left-6 right-6">
+                <div className="absolute bottom-8 left-6 right-6 space-y-3">
                     <div className="card-flat p-4 dark:bg-gray-800 dark:border-gray-700">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
-                                AT
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                                {user?.name?.charAt(0).toUpperCase() || 'T'}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">Ahmet Terapist</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">Uzman Terapist</p>
+                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{user?.name || 'Misafir'}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Terapist</p>
                             </div>
                         </div>
                     </div>
+
+                    <form action={logout}>
+                        <button type="submit" className="w-full btn btn-outline flex items-center justify-center gap-2 text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300">
+                            <LogOut className="w-4 h-4" />
+                            Çıkış Yap
+                        </button>
+                    </form>
                 </div>
             </aside>
         </>

@@ -1,12 +1,67 @@
 'use server'
 
+import { signIn, signOut } from '@/auth'
+import { AuthError } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
+import bcrypt from 'bcryptjs'
 
-export async function authenticate(formData: FormData) {
-    // Stub authentication
-    redirect('/')
+export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData,
+) {
+    try {
+        await signIn('credentials', formData)
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Hatalı email veya şifre.'
+                default:
+                    return 'Bir hata oluştu.'
+            }
+        }
+        throw error
+    }
+}
+
+export async function register(prevState: string | undefined, formData: FormData) {
+    const fullName = formData.get('fullName') as string
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    if (!fullName || !email || !password) {
+        return 'Tüm alanları doldurun.'
+    }
+
+    try {
+        const existingUser = await prisma.therapist.findUnique({
+            where: { email }
+        })
+
+        if (existingUser) {
+            return 'Bu email adresi zaten kayıtlı.'
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        await prisma.therapist.create({
+            data: {
+                full_name: fullName,
+                email: email,
+                password_hash: hashedPassword
+            }
+        })
+    } catch (error) {
+        return 'Kayıt sırasında bir hata oluştu.'
+    }
+
+    redirect('/login')
+}
+
+export async function logout() {
+    await signOut({ redirectTo: '/login' })
 }
 
 export async function createStudent(formData: FormData) {
@@ -14,15 +69,11 @@ export async function createStudent(formData: FormData) {
     const birthDateRaw = formData.get('birthDate') as string
     const notes = formData.get('notes') as string
 
-    let therapist = await prisma.therapist.findFirst()
+    // In a real app we'd get the logged in user's ID
+    const therapist = await prisma.therapist.findFirst()
+
     if (!therapist) {
-        therapist = await prisma.therapist.create({
-            data: {
-                email: 'demo@terapist.com',
-                password_hash: 'demo',
-                full_name: 'Demo Terapist'
-            }
-        })
+        throw new Error("Önce bir terapist hesabı oluşturmalısınız.")
     }
 
     await prisma.student.create({
@@ -64,10 +115,5 @@ export async function saveSession(studentId: string, rawData: { [key: string]: s
     })
 
     revalidatePath(`/students/${studentId}`)
-
-    // We cannot use redirect in a try/catch block commonly, but here it's fine as the last action
-    // However, Server Actions inside Client Components (SessionForm) should handle the redirect result or we return the ID.
-    // Actually, redirect works in Server Actions.
-    // But since we are calling this from a Client Component via a wrapper or prop, let's just redirect.
     redirect(`/sessions/${session.id}`)
 }
