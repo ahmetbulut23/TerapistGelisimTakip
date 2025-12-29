@@ -22,7 +22,7 @@ export default async function StudentDetailPage({
         notFound()
     }
 
-    const chartData = student.sessions.map(s => ({
+    const chartData = student.sessions.map((s: any) => ({
         date: new Date(s.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }),
         score: s.calculatedScore
     }))
@@ -109,7 +109,7 @@ export default async function StudentDetailPage({
                                     <div key={session.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
                                         <div className="flex items-center gap-3">
                                             <div className={`w-2 h-10 rounded-full ${session.clinicalResult === 'Green' ? 'bg-status-green' :
-                                                    session.clinicalResult === 'Yellow' ? 'bg-status-yellow' : 'bg-status-red'
+                                                session.clinicalResult === 'Yellow' ? 'bg-status-yellow' : 'bg-status-red'
                                                 }`} />
                                             <div>
                                                 <p className="font-medium">{new Date(session.date).toLocaleDateString('tr-TR', { dateStyle: 'long' })}</p>
