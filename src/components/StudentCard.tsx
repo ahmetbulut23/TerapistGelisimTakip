@@ -32,9 +32,19 @@ export function StudentCard({ student }: StudentCardProps) {
         ? resultLabelMap[student.lastResult as keyof typeof resultLabelMap]
         : 'Henüz Değerlendirilmedi'
 
+    const scoreColorMap = {
+        Red: 'bg-red-500 text-white shadow-lg shadow-red-500/30',
+        Yellow: 'bg-amber-400 text-white shadow-lg shadow-amber-400/30',
+        Green: 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30',
+    }
+
+    const scoreBadgeStyle = student.lastResult && scoreColorMap[student.lastResult as keyof typeof scoreColorMap]
+        ? scoreColorMap[student.lastResult as keyof typeof scoreColorMap]
+        : 'bg-white/20 backdrop-blur-sm text-white'
+
     return (
         <Link href={`/students/${student.id}`}>
-            <div className="card p-0 overflow-hidden group hover:shadow-xl">
+            <div className="card p-0 overflow-hidden group hover:shadow-xl transition-all duration-300">
                 {/* Header with Avatar */}
                 <div className="bg-gradient-to-br from-violet-500 to-purple-600 p-6 pb-8">
                     <div className="flex items-center justify-between mb-3">
@@ -42,8 +52,8 @@ export function StudentCard({ student }: StudentCardProps) {
                             {student.nameSurname.charAt(0).toUpperCase()}
                         </div>
                         {student.lastScore !== null && student.lastScore !== undefined && (
-                            <div className="bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                                <span className="text-white text-sm font-bold">{student.lastScore}/30</span>
+                            <div className={`${scoreBadgeStyle} px-3 py-1.5 rounded-full transition-colors`}>
+                                <span className="text-sm font-bold">{student.lastScore}/30</span>
                             </div>
                         )}
                     </div>
