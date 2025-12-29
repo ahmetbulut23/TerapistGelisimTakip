@@ -254,20 +254,16 @@ export default function ReportsPage() {
             {/* Export Options */}
             {students.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <button
-                        onClick={() => students.length > 0 && setSelectedStudent(students[0])}
-                        className="card p-6 hover:shadow-lg transition-shadow text-left disabled:opacity-50"
-                        disabled={students.length === 0}
-                    >
-                        <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4">
+                    <div className="card p-6 bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
+                        <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center mb-4">
                             <BarChart3 className="w-6 h-6 text-violet-600" />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">Gelişim Grafikleri</h3>
                         <p className="text-sm text-gray-600 mb-4">
-                            Öğrencilerin zaman içindeki gelişim trendlerini görüntüleyin
+                            Yukarıdaki tabloda her öğrencinin yanındaki "Grafik" butonuna tıklayarak gelişim grafiklerini görüntüleyebilirsiniz
                         </p>
-                        <div className="text-sm font-medium text-violet-600">Grafikleri Görüntüle →</div>
-                    </button>
+                        <div className="text-sm font-medium text-violet-600">↑ Tablodaki "Grafik" butonlarını kullanın</div>
+                    </div>
 
                     <Link href="/students" className="card p-6 hover:shadow-lg transition-shadow">
                         <div className="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mb-4">
