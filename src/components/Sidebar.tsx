@@ -25,13 +25,20 @@ export function Sidebar() {
 
     return (
         <>
-            {/* Mobile Menu Button */}
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="md:hidden fixed top-4 right-4 z-[60] p-2 bg-white rounded-lg shadow-md border border-gray-100 text-gray-700 hover:text-violet-600"
-            >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Mobile Header & Toggle */}
+            <div className="md:hidden fixed top-0 left-0 right-0 z-[60] bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 h-16 flex items-center justify-between shadow-sm transition-all duration-300">
+                <div>
+                    <h1 className="font-bold text-gray-900 dark:text-gray-100 text-sm leading-tight">Terapi Gelişim Takip</h1>
+                    <p className="text-[10px] uppercase tracking-wider text-violet-600 dark:text-violet-400 font-semibold">Hoşgeldiniz</p>
+                </div>
+
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                    {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
+            </div>
 
             {/* Overlay */}
             {isOpen && (
