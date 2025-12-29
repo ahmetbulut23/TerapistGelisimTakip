@@ -27,7 +27,7 @@ export default async function DashboardPage() {
       orderBy: { updatedAt: 'desc' }
     })
 
-    students = studentsData.map(s => ({
+    students = studentsData.map((s: any) => ({
       id: s.id,
       nameSurname: s.nameSurname,
       lastSessionDate: s.sessions[0]?.date,
