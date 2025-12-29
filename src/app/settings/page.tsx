@@ -182,12 +182,11 @@ export default function SettingsPage() {
                         </div>
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Güvenlik</h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Şifre ve güvenlik ayarları</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">Şifrenizi buradan değiştirebilirsiniz</p>
                         </div>
                     </div>
-                    <button className="btn btn-outline" onClick={() => alert('Şifre değiştirme e-postası gönderildi!')}>
-                        Şifreyi Değiştir
-                    </button>
+
+                    <PasswordChangeForm />
                 </div>
 
                 {/* Appearance */}
@@ -205,8 +204,8 @@ export default function SettingsPage() {
                         <button
                             onClick={() => updatePreference('theme', 'light')}
                             className={`flex-1 p-3 border rounded-xl text-sm font-medium transition-colors ${formData.preferences.theme === 'light'
-                                    ? 'border-violet-500 bg-violet-50 text-violet-600'
-                                    : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                ? 'border-violet-500 bg-violet-50 text-violet-600'
+                                : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                 }`}
                         >
                             Açık Tema
@@ -214,8 +213,8 @@ export default function SettingsPage() {
                         <button
                             onClick={() => updatePreference('theme', 'dark')}
                             className={`flex-1 p-3 border rounded-xl text-sm font-medium transition-colors ${formData.preferences.theme === 'dark'
-                                    ? 'border-violet-500 bg-gray-800 text-white shadow-sm ring-1 ring-violet-500'
-                                    : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                ? 'border-violet-500 bg-gray-800 text-white shadow-sm ring-1 ring-violet-500'
+                                : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                 }`}
                         >
                             Koyu Tema
@@ -267,5 +266,74 @@ export default function SettingsPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+import { useFormState, useFormStatus } from 'react-dom'
+import { updatePassword } from '@/lib/actions'
+
+function PasswordChangeForm() {
+    const [state, dispatch] = useFormState(updatePassword, undefined)
+
+    return (
+        <form action={dispatch} className="space-y-4 max-w-md">
+            <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mevcut Şifre</label>
+                <input
+                    type="password"
+                    name="currentPassword"
+                    required
+                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 dark:bg-gray-700 dark:text-white"
+                />
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Yeni Şifre</label>
+                <input
+                    type="password"
+                    name="newPassword"
+                    required
+                    minLength={6}
+                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 dark:bg-gray-700 dark:text-white"
+                />
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Yeni Şifre (Tekrar)</label>
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    required
+                    minLength={6}
+                    className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 dark:bg-gray-700 dark:text-white"
+                />
+            </div>
+
+            <PasswordSubmitButton />
+
+            {state && (
+                <p className={`text-sm ${state.includes('başarıyla') ? 'text-green-600' : 'text-red-500'}`}>
+                    {state}
+                </p>
+            )}
+        </form>
+    )
+}
+
+function PasswordSubmitButton() {
+    const { pending } = useFormStatus()
+    return (
+        <button
+            type="submit"
+            disabled={pending}
+            className="btn btn-primary px-6"
+        >
+            {pending ? (
+                <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Güncelleniyor...
+                </>
+            ) : (
+                'Şifreyi Güncelle'
+            )}
+        </button>
     )
 }

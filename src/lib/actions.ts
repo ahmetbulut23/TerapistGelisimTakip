@@ -1,6 +1,6 @@
 'use server'
 
-import { signIn, signOut } from '@/auth'
+import { signIn, signOut, auth } from '@/auth'
 import { AuthError } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db'
@@ -62,6 +62,51 @@ export async function register(prevState: string | undefined, formData: FormData
 
 export async function logout() {
     await signOut({ redirectTo: '/login' })
+}
+
+export async function updatePassword(prevState: string | undefined, formData: FormData) {
+    const currentPassword = formData.get('currentPassword') as string
+    const newPassword = formData.get('newPassword') as string
+    const confirmPassword = formData.get('confirmPassword') as string
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        return 'Tüm alanları doldurun.'
+    }
+
+    if (newPassword !== confirmPassword) {
+        return 'Yeni şifreler eşleşmiyor.'
+    }
+
+    if (newPassword.length < 6) {
+        return 'Yeni şifre en az 6 karakter olmalıdır.'
+    }
+
+    const session = await auth()
+    if (!session?.user?.email) {
+        return 'Oturum bulunamadı.'
+    }
+
+    const user = await prisma.therapist.findUnique({
+        where: { email: session.user.email }
+    })
+
+    if (!user) {
+        return 'Kullanıcı bulunamadı.'
+    }
+
+    const passwordsMatch = await bcrypt.compare(currentPassword, user.password_hash)
+    if (!passwordsMatch) {
+        return 'Mevcut şifre hatalı.'
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+    await prisma.therapist.update({
+        where: { email: session.user.email },
+        data: { password_hash: hashedPassword }
+    })
+
+    return 'Şifreniz başarıyla güncellendi!'
 }
 
 export async function createStudent(formData: FormData) {
