@@ -22,7 +22,14 @@ export async function authenticate(
                     return 'Bir hata oluştu.'
             }
         }
-        throw error
+        // If it's a redirect error (NEXT_REDIRECT), rethrow it so Next.js can handle the redirect
+        if ((error as Error).message === 'NEXT_REDIRECT') {
+            throw error
+        }
+
+        // Log the actual error for debugging
+        console.error('Login error:', error)
+        return 'Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.'
     }
 }
 
