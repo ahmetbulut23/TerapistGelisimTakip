@@ -44,7 +44,7 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
             {/* Overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-[65] md:hidden backdrop-blur-sm animate-fade-in"
+                    className="fixed inset-0 bg-black/50 z-[50] md:hidden backdrop-blur-sm animate-fade-in"
                     onClick={() => setIsOpen(false)}
                 />
             )}
