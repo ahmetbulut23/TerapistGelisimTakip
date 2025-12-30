@@ -1,14 +1,15 @@
 'use client'
 
-import { User, Bell, Lock, Palette, Globe, Mail, Save, Loader2 } from 'lucide-react'
+import { User, Bell, Lock, Palette, Globe, Mail, Save, Loader2, HelpCircle, Trash2, Plus } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useAppSettings } from '@/components/AppSettingsProvider'
+import { SESSION_QUESTIONS } from '@/lib/constants'
 
 export default function SettingsPage() {
     const { setTheme, setLanguage } = useAppSettings()
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         full_name: '',
         email: '',
         preferences: {
@@ -16,7 +17,8 @@ export default function SettingsPage() {
             emailNotifications: false,
             sessionReminders: true,
             language: 'Türkçe'
-        }
+        },
+        customQuestions: []
     })
 
     useEffect(() => {
@@ -36,7 +38,10 @@ export default function SettingsPage() {
                     sessionReminders: true,
                     language: 'Türkçe',
                     ...data.preferences
-                }
+                },
+                customQuestions: (data.customQuestions && data.customQuestions.length > 0)
+                    ? data.customQuestions
+                    : SESSION_QUESTIONS
             })
             // Sync context
             if (data.preferences?.theme) setTheme(data.preferences.theme)
@@ -132,6 +137,63 @@ export default function SettingsPage() {
                                 onChange={e => setFormData({ ...formData, email: e.target.value })}
                             />
                         </div>
+                    </div>
+                </div>
+
+                {/* Session Questions Editor */}
+                <div className="card p-6 dark:bg-gray-800 dark:border-gray-700">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center">
+                            <HelpCircle className="w-5 h-5 text-pink-600 dark:text-pink-400" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Değerlendirme Soruları</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">Seanslarda kullanılan soruları düzenleyin</p>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        {formData.customQuestions && formData.customQuestions.map((q: any, index: number) => (
+                            <div key={index} className="flex gap-2">
+                                <span className="flex items-center justify-center w-8 h-10 text-gray-400 font-medium text-sm border border-gray-100 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 shrink-0">
+                                    {index + 1}
+                                </span>
+                                <input
+                                    type="text"
+                                    value={q.text}
+                                    onChange={(e) => {
+                                        const newQuestions = [...formData.customQuestions]
+                                        newQuestions[index].text = e.target.value
+                                        setFormData({ ...formData, customQuestions: newQuestions })
+                                    }}
+                                    className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 dark:bg-gray-700 dark:text-white"
+                                    placeholder="Soru metni..."
+                                />
+                                <button
+                                    onClick={() => {
+                                        const newQuestions = formData.customQuestions.filter((_: any, i: number) => i !== index)
+                                        setFormData({ ...formData, customQuestions: newQuestions })
+                                    }}
+                                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                    title="Soruyu Sil"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                </button>
+                            </div>
+                        ))}
+
+                        <button
+                            onClick={() => {
+                                setFormData({
+                                    ...formData,
+                                    customQuestions: [...(formData.customQuestions || []), { id: `q${Date.now()}`, text: '' }]
+                                })
+                            }}
+                            className="btn btn-outline w-full border-dashed border-2 flex items-center justify-center gap-2 py-3 text-gray-500 hover:text-violet-600 hover:border-violet-300 hover:bg-violet-50 dark:hover:bg-violet-900/20"
+                        >
+                            <Plus className="w-5 h-5" />
+                            Yeni Soru Ekle
+                        </button>
                     </div>
                 </div>
 
