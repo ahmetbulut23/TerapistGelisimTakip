@@ -2,7 +2,7 @@
 
 import { FileText, Upload, Folder, Download, Trash2, Search, Filter, Plus, X } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
-import { useState, useRef, useEffect } from 'react'
+
 import { MobileScrollHint } from '@/components/MobileScrollHint'
 
 type Document = {
