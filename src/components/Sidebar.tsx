@@ -28,15 +28,24 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
         <>
             {/* Mobile Header & Toggle */}
             {/* Mobile Header & Toggle */}
+            {/* Mobile Header & Toggle */}
             <div className={`md:hidden fixed top-0 left-0 right-0 z-[60] bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 h-16 flex items-center justify-between shadow-sm transition-transform duration-300 ${isOpen ? '-translate-y-full' : 'translate-y-0'}`}>
-                <div>
-                    <h1 className="font-bold text-gray-900 dark:text-gray-100 text-sm leading-tight">Terapi Gelişim Takip</h1>
-                    <p className="text-[10px] uppercase tracking-wider text-violet-600 dark:text-violet-400 font-semibold">Hoşgeldiniz</p>
+                {/* Centered Title */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none">
+                    <h1 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600 text-lg tracking-tight">
+                        Terapi Gelişim Takip
+                    </h1>
                 </div>
+
+                {/* Empty left side to balance space if needed, or just let valid elements take space. 
+                    Since title is absolute, we just need the button on the right. 
+                    The justify-between on container might not be enough if there is no left item. 
+                    Let's use ml-auto for button to ensure it goes right.
+                */}
 
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="ml-auto relative z-10 p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                     {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                 </button>
