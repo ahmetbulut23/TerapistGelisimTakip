@@ -230,12 +230,17 @@ export default function DocumentsPage() {
             </div>
 
             {/* Document List */}
+            import {MobileScrollHint} from '@/components/MobileScrollHint'
+
             {loading ? (
                 <div className="card p-12 text-center">
                     <div className="w-8 h-8 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin mx-auto"></div>
                 </div>
             ) : filteredDocs.length > 0 ? (
                 <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                    <div className="p-4 md:hidden">
+                        <MobileScrollHint />
+                    </div>
                     <div className="overflow-x-auto custom-scrollbar">
                         <table className="w-full whitespace-nowrap">
                             <thead className="bg-gray-50 border-b border-gray-200">

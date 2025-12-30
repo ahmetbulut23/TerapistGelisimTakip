@@ -148,8 +148,11 @@ export default function ReportsPage() {
                     </button>
                 </div>
 
+                import {MobileScrollHint} from '@/components/MobileScrollHint'
+
                 {students.length > 0 ? (
                     <div className="card overflow-hidden" id="report-table">
+                        <MobileScrollHint />
                         <div className="overflow-x-auto custom-scrollbar pb-2">
                             <table className="w-full whitespace-nowrap">
                                 <thead className="bg-gray-50 border-b border-gray-200">
