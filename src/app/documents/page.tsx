@@ -2,6 +2,8 @@
 
 import { FileText, Upload, Folder, Download, Trash2, Search, Filter, Plus, X } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { MobileScrollHint } from '@/components/MobileScrollHint'
 
 type Document = {
     id: string
@@ -230,7 +232,7 @@ export default function DocumentsPage() {
             </div>
 
             {/* Document List */}
-            import {MobileScrollHint} from '@/components/MobileScrollHint'
+
 
             {loading ? (
                 <div className="card p-12 text-center">

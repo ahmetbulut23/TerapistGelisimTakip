@@ -148,7 +148,7 @@ export default function ReportsPage() {
                     </button>
                 </div>
 
-                import {MobileScrollHint} from '@/components/MobileScrollHint'
+
 
                 {students.length > 0 ? (
                     <div className="card overflow-hidden" id="report-table">
