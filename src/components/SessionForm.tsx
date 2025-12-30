@@ -10,7 +10,7 @@ type FormData = {
     [key: string]: string // 'yes' | 'no'
 }
 
-export function SessionForm({ studentId }: { studentId: string }) {
+export function SessionForm({ studentId, questions = SESSION_QUESTIONS }: { studentId: string, questions?: typeof SESSION_QUESTIONS }) {
     const { register, handleSubmit, formState: { isSubmitting } } = useForm<FormData>()
     const [error, setError] = useState<string | null>(null)
 
@@ -32,7 +32,7 @@ export function SessionForm({ studentId }: { studentId: string }) {
             )}
 
             <div className="space-y-4">
-                {SESSION_QUESTIONS.map((q, index) => (
+                {questions.map((q, index) => (
                     <div key={q.id} className="card p-4 transition-all hover:border-primary/30">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="flex gap-3">

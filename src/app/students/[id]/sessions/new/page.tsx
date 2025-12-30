@@ -9,10 +9,16 @@ export const dynamic = 'force-dynamic'
 export default async function NewSessionPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const student = await prisma.student.findUnique({
-        where: { id }
+        where: { id },
+        include: { therapist: true }
     })
 
     if (!student) notFound()
+
+    // Get custom questions or undefined (SessionForm will use defaults)
+    const questions = (student.therapist.customQuestions as any[])?.length > 0
+        ? (student.therapist.customQuestions as any[])
+        : undefined
 
     return (
         <main className="container max-w-3xl py-8">
@@ -23,10 +29,10 @@ export default async function NewSessionPage({ params }: { params: Promise<{ id:
 
             <div className="mb-8">
                 <h1 className="text-2xl font-bold mb-2">{student.nameSurname} - Seans Değerlendirmesi</h1>
-                <p className="text-muted-foreground">Aşağıdaki 15 soruyu seans gözlemlerinize göre yanıtlayınız.</p>
+                <p className="text-muted-foreground">Aşağıdaki {questions?.length || 15} soruyu seans gözlemlerinize göre yanıtlayınız.</p>
             </div>
 
-            <SessionForm studentId={student.id} />
+            <SessionForm studentId={student.id} questions={questions} />
         </main>
     )
 }
