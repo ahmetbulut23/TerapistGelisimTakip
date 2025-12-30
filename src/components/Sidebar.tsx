@@ -44,14 +44,14 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
             {/* Overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-[45] md:hidden backdrop-blur-sm animate-fade-in"
+                    className="fixed inset-0 bg-black/50 z-[65] md:hidden backdrop-blur-sm animate-fade-in"
                     onClick={() => setIsOpen(false)}
                 />
             )}
 
             {/* Sidebar */}
             <aside
-                className={`sidebar transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0 shadow-2xl' : ''
+                className={`sidebar z-[70] transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0 shadow-2xl' : ''
                     }`}
                 style={isOpen ? { transform: 'translateX(0)' } : undefined}
             >
