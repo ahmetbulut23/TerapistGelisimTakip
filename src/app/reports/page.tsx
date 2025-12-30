@@ -4,6 +4,7 @@ import { BarChart3, TrendingUp, FileText, Download, Users, ArrowUp, ArrowDown, M
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { StudentProgressModal } from '@/components/StudentProgressModal'
+import { MobileScrollHint } from '@/components/MobileScrollHint'
 
 type Student = {
     id: string
