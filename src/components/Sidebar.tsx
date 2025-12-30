@@ -64,12 +64,12 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
 
             {/* Sidebar */}
             <aside
-                className={`sidebar z-[70] transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0 shadow-2xl' : ''
+                className={`sidebar z-[70] flex flex-col h-[100dvh] transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0 shadow-2xl' : ''
                     }`}
                 style={isOpen ? { transform: 'translateX(0)' } : undefined}
             >
                 {/* Logo & Close Button */}
-                <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100 dark:border-gray-800">
+                <div className="flex-none flex items-center justify-between mb-8 pb-6 border-b border-gray-100 dark:border-gray-800">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
                             <Brain className="w-6 h-6 text-white" />
@@ -89,7 +89,7 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
                 </div>
 
                 {/* Navigation */}
-                <nav className="space-y-1">
+                <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href
                         return (
@@ -105,8 +105,9 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
                     })}
                 </nav>
 
-                {/* Bottom Section */}
-                <div className="absolute bottom-8 left-6 right-6 space-y-3">
+                {/* Bottom Section - Pushed to bottom via flex-1 on nav */}
+                {/* Added extra padding bottom for mobile browsers (Safari/Chrome bar) */}
+                <div className="flex-none pt-4 pb-24 md:pb-8 space-y-3">
                     <div className="card-flat p-4 dark:bg-gray-800 dark:border-gray-700">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
