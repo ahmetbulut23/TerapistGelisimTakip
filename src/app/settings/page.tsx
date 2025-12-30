@@ -76,7 +76,7 @@ export default function SettingsPage() {
     }
 
     const updatePreference = (key: string, value: any) => {
-        setFormData(prev => ({
+        setFormData((prev: any) => ({
             ...prev,
             preferences: {
                 ...prev.preferences,
