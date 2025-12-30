@@ -1,25 +1,20 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { auth } from '@/auth'
 
 export async function GET() {
     try {
-        // Demo: Get the first therapist or create a default one
-        let therapist = await prisma.therapist.findFirst()
+        const session = await auth()
+        if (!session?.user?.email) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
+        const therapist = await prisma.therapist.findUnique({
+            where: { email: session.user.email }
+        })
 
         if (!therapist) {
-            therapist = await prisma.therapist.create({
-                data: {
-                    email: 'demo@terapist.com',
-                    password_hash: 'hashed_password', // In real app, hash this
-                    full_name: 'Demo Terapist',
-                    preferences: {
-                        theme: 'light',
-                        emailNotifications: true,
-                        sessionReminders: true,
-                        language: 'Türkçe'
-                    }
-                }
-            })
+            return NextResponse.json({ error: 'User not found' }, { status: 404 })
         }
 
         return NextResponse.json({
@@ -35,21 +30,24 @@ export async function GET() {
 
 export async function PUT(request: Request) {
     try {
+        const session = await auth()
+        if (!session?.user?.email) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
         const body = await request.json()
         const { full_name, email, preferences } = body
 
-        // Demo: Update the first therapist
-        const therapist = await prisma.therapist.findFirst()
-
-        if (!therapist) {
-            return NextResponse.json({ error: 'Therapist not found' }, { status: 404 })
-        }
+        // Note: Changing email might require re-verification in a production app
+        // For now we allow it but it might invalidate the session if not handled.
+        // To be safe, we will NOT update email here for now, or user must re-login.
+        // Let's allow updating full_name and preferences.
 
         const updatedTherapist = await prisma.therapist.update({
-            where: { id: therapist.id },
+            where: { email: session.user.email },
             data: {
                 full_name,
-                email,
+                // email, // Keeping email update disabled to prevent locking out without re-auth logic
                 preferences
             }
         })
