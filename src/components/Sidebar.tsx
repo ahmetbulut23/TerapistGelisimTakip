@@ -31,7 +31,10 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
             {/* Mobile Header & Toggle */}
             <div className={`md:hidden fixed top-0 left-0 right-0 z-[60] bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 h-16 flex items-center justify-between shadow-sm transition-transform duration-300 ${isOpen ? '-translate-y-full' : 'translate-y-0'}`}>
                 {/* Centered Title */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none">
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center gap-2 pointer-events-none">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-sm">
+                        <Brain className="w-5 h-5 text-white" />
+                    </div>
                     <h1 className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600 text-lg tracking-tight">
                         Terapi Gelişim Takip
                     </h1>
