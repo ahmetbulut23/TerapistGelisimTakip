@@ -13,6 +13,7 @@ model Therapist {
   password_hash String
   full_name     String
   preferences   Json?     @default("{}") // Store UI settings here
+  customQuestions Json?   @default("[]") // Store custom session questions
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
