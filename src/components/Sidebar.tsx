@@ -27,7 +27,8 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
     return (
         <>
             {/* Mobile Header & Toggle */}
-            <div className="md:hidden fixed top-0 left-0 right-0 z-[60] bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 h-16 flex items-center justify-between shadow-sm transition-all duration-300">
+            {/* Mobile Header & Toggle */}
+            <div className={`md:hidden fixed top-0 left-0 right-0 z-[60] bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 h-16 flex items-center justify-between shadow-sm transition-transform duration-300 ${isOpen ? '-translate-y-full' : 'translate-y-0'}`}>
                 <div>
                     <h1 className="font-bold text-gray-900 dark:text-gray-100 text-sm leading-tight">Terapi Gelişim Takip</h1>
                     <p className="text-[10px] uppercase tracking-wider text-violet-600 dark:text-violet-400 font-semibold">Hoşgeldiniz</p>
@@ -55,15 +56,24 @@ export function Sidebar({ user }: { user?: { name?: string | null, email?: strin
                     }`}
                 style={isOpen ? { transform: 'translateX(0)' } : undefined}
             >
-                {/* Logo */}
-                <div className="flex items-center gap-3 mb-8 pb-6 border-b border-gray-100 dark:border-gray-800">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-                        <Brain className="w-6 h-6 text-white" />
+                {/* Logo & Close Button */}
+                <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-100 dark:border-gray-800">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+                            <Brain className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">TerapiPanel</h1>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Gelişim Takip</p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">TerapiPanel</h1>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Gelişim Takip</p>
-                    </div>
+                    {/* Internal Close Button for Mobile */}
+                    <button
+                        onClick={() => setIsOpen(false)}
+                        className="md:hidden p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                        <X className="w-6 h-6" />
+                    </button>
                 </div>
 
                 {/* Navigation */}
